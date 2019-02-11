@@ -406,6 +406,8 @@ To configure data protection under IIS to persist the key ring, use **one** of t
 
   This setting is in the **Process Model** section under the **Advanced Settings** for the app pool. Set Load User Profile to `True`. This stores keys under the user profile directory and protects them using DPAPI with a key specific to the user account used by the app pool.
 
+  The app pool's [setProfileEnvironment attribute](/iis/configuration/system.applicationhost/applicationpools/add/processmodel#configuration) must also be enabled to ensure that the environment is set based on the user profile for the app pool's process. The default value of `setProfileEnvironment` is `True`. In some scenarios (for example, Windows OS), `setProfileEnvironment` might be set to `False` in the `<applicationPoolDefaults>` of the *applicationHost.config* file (`%windir%\system32\inetsrv\config`). If keys aren't generated for a custom user profile, confirm that the `setProfileEnvironment` attribute isn't present, which defaults the value to `True`, or explicitly set the attribute's value to `True`.
+
 * **Use the file system as a key ring store**
 
   Adjust the app code to [use the file system as a key ring store](xref:security/data-protection/configuration/overview). Use an X509 certificate to protect the key ring and ensure the certificate is a trusted certificate. If the certificate is self-signed, place the certificate in the Trusted Root store.
